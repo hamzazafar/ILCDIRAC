@@ -284,12 +284,13 @@ class DiracILC(Dirac):
       if singleReplicaSEs.intersection(sites):
         continue
       if len(replicas) < minimumNumberOfReplicas:
-        self.log.error("File %r has less than %s replicas,"
+        self.log.error("ERROR: File %r has less than %s replicas,"
                        "please use dirac-dms-replicate-lfn to replicate to e.g.,:%s"
                        % (lfn, minimumNumberOfReplicas, ", ".join(preferredSEs - set(replicas.keys()))))
         failSubmission.append(lfn)
         for site in set((preferredSEs - set(replicas.keys()))):
-          self.log.error("dirac-dms-replicate-lfn %s %s" % (lfn, site))
+          self.log.error("  dirac-dms-replicate-lfn %s %s" % (lfn, site))
+        self.log.error("Or use job.setInputData for data files")
     if failSubmission:
       return S_ERROR("Not enough replicas for %s" % ",".join(failSubmission))
 
